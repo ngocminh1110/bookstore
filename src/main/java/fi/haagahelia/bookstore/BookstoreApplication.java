@@ -4,7 +4,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import fi.haagahelia.bookstore.domain.AppUser;
+import fi.haagahelia.bookstore.domain.AppUserRepository;
 import fi.haagahelia.bookstore.domain.Book;
 import fi.haagahelia.bookstore.domain.Category;
 import fi.haagahelia.bookstore.web.BookRepository;
@@ -20,10 +23,22 @@ public class BookstoreApplication {
     @Bean
     public CommandLineRunner initializeDatabase(
             BookRepository bookRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository,
+            AppUserRepository appUserRepository) {
 
         return (args) -> {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            AppUser user1 = new AppUser(
+                    "user",
+                    passwordEncoder.encode("user"),
+                    "user@bookstore.com", "USER");
 
+            AppUser user2 = new AppUser(
+                    "admin", passwordEncoder.encode("admin"),
+                    "admin@bookstore.com",
+                    "ADMIN");
+            appUserRepository.save(user1);
+            appUserRepository.save(user2);
             Category category1 = new Category("Fantasy");
             Category category2 = new Category("Science Fiction");
             Category category3 = new Category("Classic");

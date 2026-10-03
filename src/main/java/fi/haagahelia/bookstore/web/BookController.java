@@ -42,7 +42,7 @@ public class BookController {
         return "redirect:/booklist";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/delete/{id}")
     public String deleteBook(@PathVariable("id") Long bookId) {
         bookRepository.deleteById(bookId);
@@ -53,6 +53,7 @@ public class BookController {
     public String editBook(@PathVariable("id") Long bookId, Model model) {
         Book book = bookRepository.findById(bookId).orElse(null);
         model.addAttribute("book", book);
+        model.addAttribute("categories", categoryRepository.findAll());
         return "editbook";
     }
 }
