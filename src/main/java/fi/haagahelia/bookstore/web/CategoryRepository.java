@@ -1,9 +1,11 @@
 package fi.haagahelia.bookstore.web;
 
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import fi.haagahelia.bookstore.domain.Category;
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
-
+    List<Category> findByName(String name);
 }
